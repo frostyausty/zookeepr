@@ -7,6 +7,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 //parse incoming JSON data
 app.use(express.json());
+//tells the server to make css and js files in 'public', static resources 
+app.use(express.static('public'));
 const { animals } = require('./data/animals');
 
 function filterByQuery(query, animalsArray) {
@@ -98,6 +100,21 @@ app.get('/api/animals/:id', (req, res) => {
     }
 });
 
+//Routes to front end files
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+//End routes to front end files
+
+// /api/animals infers there is JSON data being transferred
 app.post('/api/animals', (req, res) => {
     // set id based on what the next index of the array will be
     //length property always going to be one number ahead of the last index of the array
